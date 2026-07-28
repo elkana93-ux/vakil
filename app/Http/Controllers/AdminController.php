@@ -57,6 +57,7 @@ class AdminController extends Controller
                 'person'     => $inv->person ? $inv->person->full_name : null,
                 'expires_at' => $inv->expires_at?->format('d/m/Y'),
                 'expired'    => $inv->expires_at?->isPast() ?? true,
+                'link'       => route('invitation.accept', $inv->token),
             ]);
 
         $missingBirthday = Person::whereNull('birth_date_gregorian')

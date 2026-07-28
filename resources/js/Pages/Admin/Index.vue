@@ -175,6 +175,8 @@
                 <span v-if="inv.expired" class="badge-expired">פג תוקף</span>
               </td>
               <td class="actions">
+                <button class="mini-btn" @click="copyInviteLink(inv)">{{ copiedId === inv.id ? 'הועתק ✓' : 'העתק קישור' }}</button>
+                <a class="mini-btn" :href="whatsappShareUrl(inv)" target="_blank" rel="noopener">שתף בוואטסאפ</a>
                 <button class="mini-btn" @click="extendInvite(inv)">הארך 30 יום</button>
                 <button class="mini-btn del" @click="deleteInvite(inv)">מחק</button>
               </td>
@@ -223,6 +225,7 @@ defineProps({
 })
 
 const fileInput = ref(null)
+const copiedId  = ref(null)
 const docForm = useForm({ title: '', file: null })
 
 // דיגסט מייל
@@ -302,6 +305,17 @@ function deleteDoc(d) {
 
 function extendInvite(inv) {
   router.post(`/admin/invitations/${inv.id}/extend`, {}, { preserveScroll: true })
+}
+
+function copyInviteLink(inv) {
+  navigator.clipboard.writeText(inv.link)
+  copiedId.value = inv.id
+  setTimeout(() => { if (copiedId.value === inv.id) copiedId.value = null }, 1500)
+}
+
+function whatsappShareUrl(inv) {
+  const text = `הוזמנת להצטרף לעץ המשפחה! להרשמה: ${inv.link}`
+  return `https://wa.me/?text=${encodeURIComponent(text)}`
 }
 
 function deleteInvite(inv) {
