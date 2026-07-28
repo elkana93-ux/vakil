@@ -4,7 +4,7 @@
       <!-- כותרת -->
       <div class="onboarding-header">
         <div class="family-icon">👨‍👩‍👧‍👦</div>
-        <h1>ברוכים הבאים לעץ משפחת ואקיל</h1>
+        <h1>ברוכים הבאים לעץ {{ siteName }}</h1>
         <p class="subtitle">בואו נתחיל לבנות את עץ המשפחה — ספר לנו קצת על עצמך</p>
       </div>
 
@@ -161,8 +161,9 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 
+const siteName = usePage().props.siteName
 const step = ref(1)
 const saving = ref(false)
 const errors = ref({})

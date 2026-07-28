@@ -43,7 +43,7 @@ class HandleInertiaRequests extends Middleware
             'googleEnabled' => filled(config('services.google.client_id')),
             // מצב אתר-הדגמה — באנר "הכל בדוי" ושם משפחה בדוי בכל הכותרות
             'demo'          => (bool) config('app.demo'),
-            'siteName'      => config('app.demo') ? 'משפחת ישראלי (הדגמה)' : 'משפחת ואקיל',
+            'siteName'      => config('app.demo') ? 'משפחת ישראלי (הדגמה)' : config('app.name'),
         ];
     }
 }

@@ -4,13 +4,15 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     token:      { type: String, required: true },
     email:      { type: String, required: true },
     personName: { type: String, default: null },
 });
+
+const siteName = usePage().props.siteName;
 
 const form = useForm({
     name:                  '',
@@ -27,10 +29,10 @@ const submit = () => {
 
 <template>
     <GuestLayout>
-        <Head title="הצטרפות למשפחת ואקיל" />
+        <Head :title="`הצטרפות ל${siteName}`" />
 
         <div class="mb-6 text-center" dir="rtl">
-            <h1 class="text-xl font-bold text-gray-800">ברוכים הבאים למשפחת ואקיל 🌳</h1>
+            <h1 class="text-xl font-bold text-gray-800">ברוכים הבאים ל{{ siteName }} 🌳</h1>
             <p v-if="personName" class="mt-1 text-sm text-gray-600">
                 הצטרף/י כ-<strong>{{ personName }}</strong>
             </p>
