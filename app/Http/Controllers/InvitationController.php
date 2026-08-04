@@ -54,7 +54,12 @@ class InvitationController extends Controller
             personId:  $request->person_id,
         );
 
-        Mail::to($request->email)->send(new InvitationMail($invitation));
+        try {
+            Mail::to($request->email)->send(new InvitationMail($invitation));
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->with('success', "ההזמנה נוצרה, אך שליחת המייל נכשלה — אפשר להעתיק את הקישור מעמוד הניהול.");
+        }
 
         return back()->with('success', "הזמנה נשלחה ל-{$request->email}");
     }
@@ -83,7 +88,12 @@ class InvitationController extends Controller
             personId:  $person->id,
         );
 
-        Mail::to($person->email)->send(new InvitationMail($invitation));
+        try {
+            Mail::to($person->email)->send(new InvitationMail($invitation));
+        } catch (\Throwable $e) {
+            report($e);
+            return back()->with('success', "ההזמנה נוצרה, אך שליחת המייל נכשלה — אפשר להעתיק את הקישור מעמוד הניהול.");
+        }
 
         return back()->with('success', "הזמנה נשלחה שוב ל-{$person->email}");
     }
