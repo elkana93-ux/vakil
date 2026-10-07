@@ -479,8 +479,19 @@
       "_GuestLayout-D7UuVkdT.js"
     ]
   },
+  "resources/js/Pages/Invite/Join.vue": {
+    "file": "assets/Join-AyiiJvHs.js",
+    "name": "Join",
+    "src": "resources/js/Pages/Invite/Join.vue",
+    "isDynamicEntry": true,
+    "imports": [
+      "_index.esm-CLfdJrog.js",
+      "_runtime-core.esm-bundler-B8t4V_Hw.js",
+      "_GuestLayout-D7UuVkdT.js"
+    ]
+  },
   "resources/js/Pages/Invite/Register.vue": {
-    "file": "assets/Register-BaMhSBRd.js",
+    "file": "assets/Register-yvAAKdQM.js",
     "name": "Register",
     "src": "resources/js/Pages/Invite/Register.vue",
     "isDynamicEntry": true,
@@ -508,7 +519,7 @@
     ]
   },
   "resources/js/Pages/NameStories/Index.vue": {
-    "file": "assets/Index-CI6D0z2W.js",
+    "file": "assets/Index-CI6D0z2W2.js",
     "name": "Index",
     "src": "resources/js/Pages/NameStories/Index.vue",
     "isDynamicEntry": true,
@@ -825,7 +836,7 @@
     ]
   },
   "resources/js/app.js": {
-    "file": "assets/app-wUxAJdBN.js",
+    "file": "assets/app-B8totW3O.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,
@@ -854,6 +865,7 @@
       "resources/js/Pages/Game.vue",
       "resources/js/Pages/Guide.vue",
       "resources/js/Pages/Invite/Expired.vue",
+      "resources/js/Pages/Invite/Join.vue",
       "resources/js/Pages/Invite/Register.vue",
       "resources/js/Pages/NameStories/Form.vue",
       "resources/js/Pages/NameStories/Index.vue",

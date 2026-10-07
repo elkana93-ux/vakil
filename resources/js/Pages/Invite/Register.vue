@@ -8,7 +8,7 @@ import { Head, useForm, usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
     token:      { type: String, required: true },
-    email:      { type: String, required: true },
+    email:      { type: String, default: null },
     personName: { type: String, default: null },
 });
 
@@ -16,6 +16,7 @@ const siteName = usePage().props.siteName;
 
 const form = useForm({
     name:                  '',
+    email:                 '',
     password:              '',
     password_confirmation: '',
 });
@@ -36,7 +37,7 @@ const submit = () => {
             <p v-if="personName" class="mt-1 text-sm text-gray-600">
                 הצטרף/י כ-<strong>{{ personName }}</strong>
             </p>
-            <p class="mt-1 text-sm text-gray-500">{{ email }}</p>
+            <p v-if="email" class="mt-1 text-sm text-gray-500">{{ email }}</p>
         </div>
 
         <form @submit.prevent="submit" dir="rtl">
@@ -52,6 +53,20 @@ const submit = () => {
                     autocomplete="name"
                 />
                 <InputError class="mt-2" :message="form.errors.name" />
+            </div>
+
+            <div v-if="!email" class="mt-4">
+                <InputLabel for="email" value="אימייל (בו תתחברו)" />
+                <TextInput
+                    id="email"
+                    type="email"
+                    class="mt-1 block w-full"
+                    v-model="form.email"
+                    dir="ltr"
+                    required
+                    autocomplete="username"
+                />
+                <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">

@@ -130,6 +130,64 @@ class InvitationController extends Controller
     }
 
     /**
+     * Self-service: a family member enters their phone and sees their private sign-up link.
+     */
+    public function joinForm()
+    {
+        return Inertia::render('Invite/Join', [
+            'link'     => session('join_link'),
+            'name'     => session('join_name'),
+            'notFound' => (bool) session('join_not_found'),
+        ]);
+    }
+
+    public function joinByPhone(Request $request)
+    {
+        $request->validate(['phone' => 'required|string|max:30']);
+
+        $normalize = function (?string $v): string {
+            $d = preg_replace('/\D+/', '', (string) $v);
+            if (str_starts_with($d, '972')) {
+                $d = '0' . substr($d, 3);
+            }
+            return $d;
+        };
+
+        $wanted = $normalize($request->phone);
+
+        $person = strlen($wanted) >= 9
+            ? Person::whereNotNull('phone')->get()->first(fn($p) => $normalize($p->phone) === $wanted)
+            : null;
+
+        $inviter = User::where('role', 'admin')->orderBy('id')->first();
+
+        if (! $person || ! $inviter) {
+            return redirect()->route('join')->with('join_not_found', true);
+        }
+
+        if (User::where('person_id', $person->id)->exists()) {
+            return redirect()->route('join')->with('join_name', $person->full_name)->with('join_link', route('login'));
+        }
+
+        Invitation::where('person_id', $person->id)
+            ->whereNull('used_at')
+            ->update(['expires_at' => now()->subMinute()]);
+
+        $invitation = Invitation::generate(
+            email:     $person->email ?? '',
+            invitedBy: $inviter->id,
+            personId:  $person->id,
+        );
+        if (! $person->email) {
+            $invitation->update(['email' => null]);
+        }
+
+        return redirect()->route('join')
+            ->with('join_name', $person->full_name)
+            ->with('join_link', route('invitation.accept', $invitation->token));
+    }
+
+    /**
      * Show the registration form for an invited user
      */
     public function show(string $token)
@@ -163,11 +221,12 @@ class InvitationController extends Controller
         $request->validate([
             'name'     => 'required|string|max:255',
             'password' => 'required|string|min:8|confirmed',
+            'email'    => $invitation->email ? 'nullable' : 'required|email|unique:users,email',
         ]);
 
         $user = User::create([
             'name'       => $request->name,
-            'email'      => $invitation->email,
+            'email'      => $invitation->email ?: $request->email,
             'password'   => Hash::make($request->password),
             'role'       => 'member',
             'status'     => 'active',

@@ -157,6 +157,8 @@ Route::middleware('auth')->group(function () {
 });
 
 // Invitations
+Route::get('/join', [InvitationController::class, 'joinForm'])->name('join');
+Route::post('/join', [InvitationController::class, 'joinByPhone'])->middleware('throttle:5,1')->name('join.send');
 Route::get('/invite/{token}', [InvitationController::class, 'show'])->name('invitation.accept');
 Route::post('/invite/{token}', [InvitationController::class, 'register'])->name('invitation.register');
 Route::middleware(['auth'])->post('/invitations', [InvitationController::class, 'send'])->name('invitation.send');
